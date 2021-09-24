@@ -41,7 +41,11 @@ var buttonEl = "";
 var startQuestion = 0;
 var i = "";
 
+var finalScore;
+
 var timerStartValue = 75;
+
+var timerInterval;
 
 // questions array of objects
 var questions = [
@@ -93,6 +97,31 @@ var questions = [
 
 // FUNCTIONS
 
+function setTime(stopTimer) {
+  if (stopTimer === true) {
+    console.log("stopTimer = " + stopTimer);
+    clearInterval(timerInterval);
+    return;
+  } else {
+    // start quiz
+    startQuiz();
+    // Sets interval in variable
+    var secondsLeft = timerStartValue;
+    timerInterval = setInterval(function () {
+      countDownTimer.textContent = secondsLeft;
+      secondsLeft--;
+      finalScore = secondsLeft;
+
+      if (secondsLeft === 0) {
+        // Stops execution of action at set interval
+        clearInterval(timerInterval);
+        // Calls function to create and append image
+        window.alert("Time is up. You lose!");
+      }
+    }, 1000);
+  }
+}
+
 // clear <main> elements
 function clearStage() {
   // ...
@@ -112,14 +141,19 @@ function checkAnswer(answerPressed, answer) {
     alertWinLose.textContent = "You Win!";
     mainContent.appendChild(alertWinLose);
     i++;
-    startQuiz();
+    setTimeout(function () {
+      startQuiz();
+    }, 1000);
   } else {
     console.log("You are a loser");
     var alertWinLose = document.createElement("h2");
     alertWinLose.textContent = "You Lose!";
+
     mainContent.appendChild(alertWinLose);
     i++;
-    startQuiz();
+    setTimeout(function () {
+      startQuiz();
+    }, 1000);
   }
 }
 
@@ -155,12 +189,51 @@ function buildIntro() {
 
   // now that button is on page, create a way to select it, and add click event to it
   var generateBtn = document.querySelector("#generate");
-  generateBtn.addEventListener("click", startQuiz);
+  generateBtn.addEventListener("click", setTime);
+}
+
+// build intro page with H1, P, and button
+function buildAllDone() {
+  // function variables
+  var titleEl = "";
+  var paragraphEl = "";
+  var formEl = "";
+
+  // check your progress
+  console.log("buildAllDone function entered");
+  console.log(mainContent);
+
+  // make H1, assign it text, and append it to main tag
+  titleEl = document.createElement("h1");
+  titleEl.textContent = "All done!";
+  mainContent.appendChild(titleEl);
+
+  // do the same for the paragraph
+  paragraphEl = document.createElement("p");
+  paragraphEl.textContent = "Your final score is " + finalScore;
+  mainContent.appendChild(paragraphEl);
+
+  // do the same for the form field
+
+  formEl = document.createElement("form");
+  formEl.innerHTML =
+    '<form><p><label for="initials">Enter initials:</label><input id="initials" type="text" placeholder="X.X." /><button>Submit</button></p>';
+  // buttonEl.textContent = "Start Quiz";
+  // buttonEl.setAttribute("id", "generate");
+  mainContent.appendChild(formEl);
 }
 
 function startQuiz() {
   // remove items from DOM
   clearStage();
+
+  if (i === 5) {
+    console.log("move to your score screen");
+    var stopTimer = true;
+    setTime(stopTimer);
+    buildAllDone();
+    return;
+  }
 
   // declare variables for answers text and answer
   var answerButton1El = "";
