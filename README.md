@@ -14,7 +14,7 @@ Some of the most recent things we have learned are not reflected in this project
 
 # Github pages link
 
-Paste in.
+https://bretpeters3n.github.io/code-quiz/
 
 # Screenshot of final product
 
