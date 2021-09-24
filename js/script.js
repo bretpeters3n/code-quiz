@@ -31,6 +31,7 @@ CLOSE */
 // ...
 var mainContent = document.getElementById("mainContent");
 var countDownTimer = document.getElementById("timerValue");
+var addHighscoreBtn;
 
 // GLOBAL VARIABLES
 // declare title text variable, paragraph text variable, and timer start value
@@ -42,8 +43,12 @@ var startQuestion = 0;
 var i = "";
 
 var finalScore;
+var highscores;
+var initial;
+var score;
 
 var timerStartValue = 75;
+var secondsLeft;
 
 var timerInterval;
 
@@ -97,29 +102,23 @@ var questions = [
 
 // FUNCTIONS
 
-function setTime(stopTimer) {
-  if (stopTimer === true) {
-    console.log("stopTimer = " + stopTimer);
-    clearInterval(timerInterval);
-    return;
-  } else {
-    // start quiz
-    startQuiz();
-    // Sets interval in variable
-    var secondsLeft = timerStartValue;
-    timerInterval = setInterval(function () {
-      countDownTimer.textContent = secondsLeft;
-      secondsLeft--;
-      finalScore = secondsLeft;
+function setTime() {
+  // start quiz
+  startQuiz();
+  // Sets interval in variable
+  secondsLeft = timerStartValue;
+  timerInterval = setInterval(function () {
+    countDownTimer.textContent = secondsLeft;
+    finalScore = secondsLeft;
+    secondsLeft--;
 
-      if (secondsLeft === 0) {
-        // Stops execution of action at set interval
-        clearInterval(timerInterval);
-        // Calls function to create and append image
-        window.alert("Time is up. You lose!");
-      }
-    }, 1000);
-  }
+    if (secondsLeft === 0) {
+      // Stops execution of action at set interval
+      clearInterval(timerInterval);
+      // Calls function to create and append image
+      window.alert("Time is up. You lose!");
+    }
+  }, 1000);
 }
 
 // clear <main> elements
@@ -128,6 +127,25 @@ function clearStage() {
   mainContent.innerHTML = "";
   // check progress w/ console log
   console.log("Stage was cleared");
+}
+
+function gatherHighscores() {
+  console.log("gatherHighscores function has been entered");
+  // Check to see if there are highscores in the browsers local storage
+  if (highscores !== null) {
+    console.log("highscores !== null");
+  }
+}
+
+function addHighscore() {
+  console.log("addHighScore function has been entered");
+  var thisHighscore = {
+    initial: initial,
+    score: score,
+  };
+  console.log(thisHighscore);
+  // localStorage.setItem("studentGrade", JSON.stringify(studentGrade));
+  // renderMessage();
 }
 
 // check if answer is correct or incorrect
@@ -148,7 +166,7 @@ function checkAnswer(answerPressed, answer) {
     console.log("You are a loser");
     var alertWinLose = document.createElement("h2");
     alertWinLose.textContent = "You Lose!";
-
+    secondsLeft = secondsLeft - 10;
     mainContent.appendChild(alertWinLose);
     i++;
     setTimeout(function () {
@@ -163,6 +181,9 @@ function buildIntro() {
   var titleEl = "";
   var paragraphEl = "";
   var buttonEl = "";
+
+  // gather highscores
+  gatherHighscores();
 
   // check your progress
   console.log("Build intro function entered");
@@ -217,10 +238,29 @@ function buildAllDone() {
 
   formEl = document.createElement("form");
   formEl.innerHTML =
-    '<form><p><label for="initials">Enter initials:</label><input id="initials" type="text" placeholder="X.X." /><button>Submit</button></p>';
+    // '<form><p><label for="initials">Enter initials:</label><input name="initials" id="initials" type="text" placeholder="X.X." /><button id="add" type="button">Submit</button></p>';
+    '<form style="display: flex;"><label>Enter initials</label><!-- <textarea id="msg" name="comments"></textarea> --><input id="initials" name="initials"></textarea><button id="save">SAVE</button></form>';
   // buttonEl.textContent = "Start Quiz";
   // buttonEl.setAttribute("id", "generate");
+
+  // initial = initial.value;
+
   mainContent.appendChild(formEl);
+  score = finalScore;
+  addHighscoreBtn = document.getElementById("save");
+  initial = document.getElementById("initials");
+
+  addHighscoreBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    var highscore = {
+      initial: initial.value,
+      score: score,
+    };
+
+    localStorage.setItem("highscore", JSON.stringify(highscore));
+    window.location.href = "highScore.html";
+  });
 }
 
 function startQuiz() {
@@ -230,7 +270,7 @@ function startQuiz() {
   if (i === 5) {
     console.log("move to your score screen");
     var stopTimer = true;
-    setTime(stopTimer);
+    clearInterval(timerInterval);
     buildAllDone();
     return;
   }

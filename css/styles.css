@@ -40,6 +40,14 @@ p {
   line-height: 20px;
 }
 
+p#highscores {
+  text-align: left;
+  background-color: #EFE7FA;
+  border-radius: 4px;
+  padding: 4px;
+  width: 100%;
+}
+
 button {
   margin: 4px 0px;
   padding: 8px 16px;
