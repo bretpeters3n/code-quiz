@@ -12,11 +12,6 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 -->
 
-<img src="https://img.shields.io/badge/HTML-orange"/>
-<img src="https://img.shields.io/badge/CSS-yellow"/>
-<img src="https://img.shields.io/badge/Javascript-green"/>
-
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -27,6 +22,11 @@
   -->
 
 <h2 align="center">Code Quiz</h2>
+  <p align="center">
+    <img src="https://img.shields.io/badge/HTML-orange"/>
+    <img src="https://img.shields.io/badge/CSS-yellow"/>
+    <img src="https://img.shields.io/badge/Javascript-green"/>     
+  </p>           
   <p align="center">
     This project is a timed code quiz.
     <br />
